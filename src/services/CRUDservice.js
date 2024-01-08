@@ -4,10 +4,11 @@ const salt = bcrypt.genSaltSync(10);
 const createNewUser = async (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const hashPass = await hashUserPass(data.password)
+            // const hashPass = await hashUserPass(data.password)
             await db.User.create({
                 email: data.email,
-                password: hashPass,
+                password: data.password,
+                // password: hashPass,
                 firstName: data.firstName,
                 lastName: data.lastName,
                 address: data.address,
@@ -35,9 +36,70 @@ const getAllUser = () => {
         }
     })
 }
+const getUserById = (userId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const user = await db.User.findOne({
+                where: { id: userId },
+                raw: true,
+            });
+            if (user) {
+                resolve(user);
+            }
+            else {
+                resolve([]);
+            }
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+const updateUserById = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const user = await db.User.findOne({
+                where: {
+                    id: data.id
+                }
+            })
+            if (user) {
+                user.firstName = data.firstName,
+                    user.lastName = data.lastName
+                await user.save();
+                const users = await db.User.findAll()
+                resolve(users);
+            } else {
+                resolve()
+            }
+
+        }
+        catch (e) {
+            reject(e);
+        }
+    })
+}
+const DeleteUserById = (userId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const user = await db.User.findOne({
+                where: { id: userId },
+            });
+            if (user) {
+                await user.destroy();
+            }
+            resolve();
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
 module.exports = {
     createNewUser: createNewUser,
     getAllUser: getAllUser,
+    getUserById: getUserById,
+    updateUserById: updateUserById,
+    DeleteUserById: DeleteUserById,
+
 }
 const hashUserPass = (pass) => {
     return new Promise(async (resolve, reject) => {
