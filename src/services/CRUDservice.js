@@ -4,15 +4,15 @@ const salt = bcrypt.genSaltSync(10);
 const createNewUser = async (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            // const hashPass = await hashUserPass(data.password)
+            let hashPass = await hashUserPass(data.password)
             await db.User.create({
                 email: data.email,
-                password: data.password,
-                // password: hashPass,
+                // password: data.password,
+                password: hashPass,
                 firstName: data.firstName,
                 lastName: data.lastName,
                 address: data.address,
-                gender: data.gender === '1 ' ? true : false,
+                gender: data.gender === '1' ? true : false,
                 roleid: data.roleid,
                 phoneNumber: data.phoneNumber,
             })
@@ -22,9 +22,7 @@ const createNewUser = async (data) => {
             reject(e);
         }
     })
-    const hashPass = await hashUserPass(data.password)
-    // console.log('data from service', data);
-    // console.log('this hash pass', hashPass);
+
 }
 const getAllUser = () => {
     return new Promise((resolve, reject) => {
@@ -104,7 +102,7 @@ module.exports = {
 const hashUserPass = (pass) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const hashPassword = await bcrypt.hashSync("B4c0/\/", salt);
+            let hashPassword = await bcrypt.hashSync(pass, salt);
             resolve(hashPassword)
         } catch (e) {
             reject(e);

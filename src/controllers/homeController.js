@@ -24,7 +24,7 @@ const postCrud = async (req, res) => {
         const mess = await CRUDservice.createNewUser(req.body);
         console.log(mess);
         // console.log(req.body);
-        return res.send('postcrud');
+        return res.render('crud.ejs');
 
     }
     catch (e) {
