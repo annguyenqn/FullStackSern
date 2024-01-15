@@ -164,6 +164,8 @@ let deleteUser = (userId) => {
 }
 let editUser = (data) => {
     return new Promise(async (resolve, reject) => {
+        // console.log('this is data edit', data);
+
         try {
             let user = await db.User.findOne({
                 where: {
@@ -172,8 +174,10 @@ let editUser = (data) => {
 
             })
             if (user) {
+                user.email = data.email;
                 user.firstName = data.firstName;
                 user.lastName = data.lastName;
+                user.phoneNumber = data.phoneNumber;
                 // await console.log('this is user service', user);
                 await user.save();
                 resolve({

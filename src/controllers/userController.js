@@ -60,13 +60,13 @@ const handleDeleteUser = async (req, res) => {
     return res.status(200).json(message);
 }
 const handleEditUser = async (req, res) => {
-    if (!req.body.id) {
-        return res.status(200).json({
-            errCode: 1,
-            message: 'Missing parameter'
-        });
+    // if (!req.body.id) {
+    //     return res.status(200).json({
+    //         errCode: 1,
+    //         message: 'Missing parameter'
+    //     });
 
-    }
+    // }
     let message = await userService.editUser(req.body);
     return res.status(200).json(message);
 
