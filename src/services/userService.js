@@ -130,8 +130,6 @@ let createNewUser = (data) => {
         }
     })
 }
-
-
 let deleteUser = (userId) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -198,9 +196,6 @@ let editUser = (data) => {
 
     })
 }
-
-
-
 const hashUserPass = (pass) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -211,11 +206,39 @@ const hashUserPass = (pass) => {
         }
     })
 }
+
+const getAllCodeService = (typeInput) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!typeInput) {
+                resolve({
+                    errCode: 1,
+                    errMessege: 'Missing required param'
+                })
+            } else {
+                let res = {};
+                let allcode = await db.Allcode.findAll({
+                    where: {
+                        type: typeInput
+                    }
+                });
+                // console.log('this is all code', allcode);
+                res.errCode = 0;
+                res.data = allcode;
+                resolve(res);
+            }
+
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
 module.exports = {
     handldeUserLogin: handldeUserLogin,
     checkUserEmail: checkUserEmail,
     getAllUsers: getAllUsers,
     createNewUser: createNewUser,
     deleteUser: deleteUser,
-    editUser: editUser
+    editUser: editUser,
+    getAllCodeService: getAllCodeService
 }
