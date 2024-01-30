@@ -7,20 +7,26 @@ const handleLogin = async (req, res) => {
     let password = req.body.password;
     if (!email || !password) {
         return res.status(500).json({
+            //Nếu body trả về email or pass rỗng thì trả về obj có errcode:1 và errMess 
             errCode: 1,
             messsage: 'Email or Password is missing'
         })
     }
+    //Nếu body trả về đầy đủ tham số thì gọi hàm handleUserLogin từ userService
     const userData = await userService.handldeUserLogin(email, password);
     return res.status(200).json({
+        //Nếu thực hiện gọi hàm thành công trả về res sau
         errCode: userData.errCode,
         errMessege: userData.errMessege,
+        // user có data thì lưu trong biến user còn không thì trả về obj rỗng
         user: userData.user ? userData.user : {}
     })
 }
 
 const handleGetAllUser = async (req, res) => {
+    // id được req lấy từ url
     let id = req.query.id;
+    //gọi hàm get all user nhưng truyền param 
     let users = await userService.getAllUsers(id);
     if (!id) {
         return res.status(200).json({
